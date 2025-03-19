@@ -3,9 +3,9 @@ Description=Python Intrusion Detection System
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/%u/base-ids/base-ids.py 
+ExecStart=/usr/bin/python3 /home/nafnlaus/Codes/pspspython/ids/base-ids.py
 Restart=always
-User=u%
+User=root
 
 [Install]
 WantedBy=multi-user.target
