@@ -2,6 +2,7 @@
 from scapy.all import sniff, IP, TCP, ARP
 import time
 import os
+import requests
 
 # sus IPs if you want to track
 BLACKLIST_IPS = ["192.168.1.100", "10.0.0.200"]
@@ -69,8 +70,8 @@ def analyze_packet(packet):
 
 # detecting arp spoofing attempts
 def detect_arp_spoof(packet):
-    if packet.haslayer(ARP) and packet[ARP].op == 2:  # ARP reply packet
-        sender_ip = packet[ARP].psrc  # the ip being claimed (i hope this works pls)
+    if packet.haslayer(ARP) and packet[ARP].op == 2:  # ARP Reply packet
+        sender_ip = packet[ARP].psrc  # the ip being claimed like a b
         sender_mac = packet[ARP].hwsrc  # the mac address claiming it
 
         # if an IP is using multiple MACs, it might be an attack
@@ -83,6 +84,28 @@ def detect_arp_spoof(packet):
 
         # update ARP table
         ARP_TABLE[sender_ip] = sender_mac
+
+
+def get_ip_geolocation(ip):
+    try:
+        response = requests.get(f"http://ipinfo.io/{ip}/json", timeout=5)
+        response.raise_for_status()  # should raise an error for bad responses
+        data = response.json()
+        return f"Location: {data.get('city')}, {data.get('country')} | ISP: {data.get('org')}"
+    except requests.exceptions.RequestException as e:
+        return f"Location unknown (Error: {e})"
+
+
+def log_alert_with_geo(message, block_ip_flag=False, ip=None):
+    timestamp = time.strftime("[%Y-%m-%d %H:%M:%S]")
+    geo_info = get_ip_geolocation(ip) if ip else ""
+    alert_message = f"{timestamp} ALERT: {message} {geo_info}"
+    print(alert_message)
+    with open("ids_alerts.log", "a") as log_file:
+        log_file.write(alert_message + "\n")
+
+    if block_ip_flag and ip:
+        block_ip(ip)
 
 
 # start sniffing network packets for threats
