@@ -77,7 +77,7 @@ def detect_arp_spoof(packet):
         # if an IP is using multiple MACs, it might be an attack
         if sender_ip in ARP_TABLE and ARP_TABLE[sender_ip] != sender_mac:
             log_alert(
-                f"⚠️ possible ARP spoofing detected! {sender_ip} is using multiple MAC addresses!",
+                f"possible ARP spoofing detected! {sender_ip} is using multiple MAC addresses!",
                 True,
                 sender_ip,
             )
