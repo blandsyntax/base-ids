@@ -14,6 +14,7 @@ git clone (repo)
 cd base-ids
 sudo ./ids-setup-service.sh (chmod +x){if not already executable}
 ```
+(i would work on this later, but in ids.service you have to change Exec Start name to you username and the User to username too)(i would try to make it work automatically again :p)
 
 **Usage:**
 if you just want to run it in a terminal as a process, do the following

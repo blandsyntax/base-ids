@@ -3,6 +3,7 @@ from scapy.all import sniff, IP, TCP, ARP
 import time
 import os
 import requests
+# import macspoofdetec(it was a test it failed horribly)
 
 # sus IPs if you want to track
 BLACKLIST_IPS = ["192.168.1.100", "10.0.0.200"]
@@ -106,6 +107,34 @@ def log_alert_with_geo(message, block_ip_flag=False, ip=None):
 
     if block_ip_flag and ip:
         block_ip(ip)
+
+
+# def log_alert(message):(actually i thought i would do it again but it may just overwrite the ine with block ip thingy)
+# timestamp = time.strftime("[%Y-%m-%d %H:%M:%S]")
+#  alert_message = f"{timestamp} ALERT: {message}"
+# print(alert_message)
+# with open("ids_alerts.log", "a") as log_file:
+#   log_file.write(alert_message + "\n")
+
+
+MAC_TABLE = {}
+
+
+def detect_mac_spoof(packet):
+    if packet.haslayer(IP):
+        src_ip = packet[IP].src
+        src_mac = packet.src
+
+        if src_ip in MAC_TABLE and MAC_TABLE[src_ip] != src_mac:
+            log_alert(
+                f"possible MAC spoofing detected! {src_ip} changed its MAC from {MAC_TABLE[src_ip]} to {src_mac}!"
+            )
+
+        MAC_TABLE[src_ip] = src_mac
+
+
+def start_mac_spoof_detection():
+    sniff(filter="ip", prn=detect_mac_spoof, store=False)
 
 
 # start sniffing network packets for threats
