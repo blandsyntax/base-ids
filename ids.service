@@ -1,0 +1,31 @@
+[Unit]
+Description=Python Intrusion Detection System
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/syn/base-ids/main.py
+Restart=always
+RestartSec=10
+User=root
+Group=root
+WorkingDirectory=/home/syn/base-ids
+StandardOutput=append:/var/log/ids.log
+StandardError=append:/var/log/ids_error.log
+TimeoutStartSec=30
+TimeoutStopSec=15
+
+# Security settings (uncomment if you want to harden the service)
+# NoNewPrivileges=true
+# PrivateTmp=true
+# ProtectSystem=strict
+# ProtectHome=true
+# ReadWritePaths=/var/log /home/syn/base-ids
+
+# Environment variables
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
