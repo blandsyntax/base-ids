@@ -16,7 +16,7 @@ A lightweight, real-time Intrusion Detection System (IDS) written in Python that
 ## System Requirements
 
 ### Dependencies
-- **Python**: Version 3.6 or higher
+- **Python**: Version 3.1 or higher
 - **System packages**: `libpcap-dev`, `tcpdump`, `iptables`
 - **Python packages**: `scapy`, `numpy`, `requests`
 
