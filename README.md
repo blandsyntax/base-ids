@@ -1,10 +1,10 @@
 # Abyss IDS
 
 A lightweight, real-time Intrusion Detection System (IDS) written in
-Python.\
-Monitors network traffic and alerts on:\
-- Blacklisted IP connections\
-- SYN flood attempts\
+Python.
+Monitors network traffic and alerts on:
+- Blacklisted IP connections
+- SYN flood attempts
 - Port scans
 
 ------------------------------------------------------------------------
@@ -12,7 +12,7 @@ Monitors network traffic and alerts on:\
 ## Requirements
 
 -   **Python** ≥ 3.10\
--   System: `libpcap-dev`, `tcpdump`, `iptables`\
+-   System: `libpcap-dev`, `tcpdump`, `iptables`
 -   Python: `scapy`, `numpy`, `requests`
 
 Supported distros: Ubuntu/Debian, RHEL/CentOS, Fedora, Arch Linux.
@@ -76,6 +76,6 @@ sudo systemctl daemon-reload
 
 ## Notes
 
--   Must run as **root** for packet capture.\
--   Default interface can be changed inside `abyss-ids.py`.\
+-   Must run as **root** for packet capture.
+-   Default interface can be changed inside `abyss-ids.py`.
 -   Lightweight enough for home labs, servers, or small networks.
