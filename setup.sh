@@ -14,8 +14,8 @@ NC='\033[0m' # No Color
 
 # Script configuration
 SCRIPT_NAME="IDS Service Setup"
-IDS_SCRIPT_NAME="base-ids.py"
-SERVICE_NAME="ids.service"
+IDS_SCRIPT_NAME="abyss-ids.py"
+SERVICE_NAME="abyssids.service"
 LOG_DIR="/var/log"
 SYSTEMD_DIR="/etc/systemd/system"
 
@@ -141,7 +141,7 @@ create_service_file() {
 
   cat >"$SYSTEMD_DIR/$SERVICE_NAME" <<EOF
 [Unit]
-Description=Python Intrusion Detection System
+Description=Python Intrusion Detection System (AbyssIDS)
 After=network-online.target
 Wants=network-online.target
 StartLimitIntervalSec=0
@@ -154,8 +154,8 @@ RestartSec=10
 User=root
 Group=root
 WorkingDirectory=$current_dir
-StandardOutput=append:$LOG_DIR/ids.log
-StandardError=append:$LOG_DIR/ids_error.log
+StandardOutput=append:$LOG_DIR/abyssids.log
+StandardError=append:$LOG_DIR/abyssids_error.log
 TimeoutStartSec=30
 TimeoutStopSec=15
 
@@ -176,17 +176,17 @@ setup_logging() {
   print_status "Setting up log files..."
 
   # Create log files
-  touch "$LOG_DIR/ids.log" "$LOG_DIR/ids_error.log"
-  chmod 644 "$LOG_DIR/ids.log" "$LOG_DIR/ids_error.log"
+  touch "$LOG_DIR/abyssids.log" "$LOG_DIR/abyssids_error.log"
+  chmod 644 "$LOG_DIR/abyssids.log" "$LOG_DIR/abyssids_error.log"
 
   # Create local alert log file in script directory
   local current_dir=$(get_current_dir)
   local real_user=$(get_real_user)
 
-  touch "$current_dir/ids_alerts.log"
+  touch "$current_dir/abyssids_alerts.log"
 
   if [[ "$real_user" != "root" ]]; then
-    chown "$real_user:$real_user" "$current_dir/ids_alerts.log"
+    chown "$real_user:$real_user" "$current_dir/abyssids_alerts.log"
   fi
 
   print_success "Log files configured"
@@ -227,10 +227,10 @@ test_ids_script() {
 
 # Function to start service and show status
 start_service() {
-  print_status "Starting IDS service..."
+  print_status "Starting AbyssIDS service..."
 
   if systemctl start "$SERVICE_NAME"; then
-    print_success "IDS service started successfully"
+    print_success "AbyssIDS service started successfully"
 
     # Show service status
     echo
@@ -243,7 +243,7 @@ start_service() {
     journalctl -u "$SERVICE_NAME" -n 10 --no-pager
 
   else
-    print_error "Failed to start IDS service"
+    print_error "Failed to start AbyssIDS service"
     print_status "Check logs with: journalctl -u $SERVICE_NAME -f"
     return 1
   fi
@@ -251,29 +251,29 @@ start_service() {
 
 # Function to show usage instructions
 show_usage_instructions() {
-  print_header "IDS Service Management Commands"
+  print_header "AbyssIDS Service Management Commands"
 
   echo -e "${GREEN}Service Control:${NC}"
-  echo "  sudo systemctl start ids.service     # Start the service"
-  echo "  sudo systemctl stop ids.service      # Stop the service"
-  echo "  sudo systemctl restart ids.service   # Restart the service"
-  echo "  sudo systemctl status ids.service    # Check service status"
+  echo "  sudo systemctl start abyssids.service     # Start the service"
+  echo "  sudo systemctl stop abyssids.service      # Stop the service"
+  echo "  sudo systemctl restart abyssids.service   # Restart the service"
+  echo "  sudo systemctl status abyssids.service    # Check service status"
   echo
   echo -e "${GREEN}Startup Control:${NC}"
-  echo "  sudo systemctl enable ids.service    # Enable on boot (already done)"
-  echo "  sudo systemctl disable ids.service   # Disable on boot"
+  echo "  sudo systemctl enable abyssids.service    # Enable on boot (already done)"
+  echo "  sudo systemctl disable abyssids.service   # Disable on boot"
   echo
   echo -e "${GREEN}Log Monitoring:${NC}"
-  echo "  journalctl -u ids.service -f         # Follow live service logs"
-  echo "  journalctl -u ids.service --since today  # Today's logs"
-  echo "  tail -f $(get_current_dir)/ids_alerts.log  # Follow alert logs"
-  echo "  tail -f /var/log/ids.log             # Follow output logs"
-  echo "  tail -f /var/log/ids_error.log       # Follow error logs"
+  echo "  journalctl -u abyssids.service -f         # Follow live service logs"
+  echo "  journalctl -u abyssids.service --since today  # Today's logs"
+  echo "  tail -f $(get_current_dir)/abyssids_alerts.log  # Follow alert logs"
+  echo "  tail -f /var/log/abyssids.log             # Follow output logs"
+  echo "  tail -f /var/log/abyssids_error.log       # Follow error logs"
   echo
   echo -e "${GREEN}Configuration:${NC}"
   echo "  Service file: $SYSTEMD_DIR/$SERVICE_NAME"
   echo "  IDS script: $(get_current_dir)/$IDS_SCRIPT_NAME"
-  echo "  Alert logs: $(get_current_dir)/ids_alerts.log"
+  echo "  Alert logs: $(get_current_dir)/abyssids_alerts.log"
 }
 
 # Function to cleanup on failure
@@ -315,7 +315,7 @@ main() {
   start_service
 
   echo
-  print_success "IDS service setup completed successfully!"
+  print_success "AbyssIDS service setup completed successfully!"
   echo
   show_usage_instructions
 }

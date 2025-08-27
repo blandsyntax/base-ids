@@ -6,12 +6,12 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/syn/base-ids/main.py
+ExecStart=/usr/bin/python3 /home/syn/idsabyss/main.py
 Restart=always
 RestartSec=10
 User=root
 Group=root
-WorkingDirectory=/home/syn/base-ids
+WorkingDirectory=/home/syn/idsabyss
 StandardOutput=append:/var/log/ids.log
 StandardError=append:/var/log/ids_error.log
 TimeoutStartSec=30
@@ -22,7 +22,7 @@ TimeoutStopSec=15
 # PrivateTmp=true
 # ProtectSystem=strict
 # ProtectHome=true
-# ReadWritePaths=/var/log /home/syn/base-ids
+# ReadWritePaths=/var/log /home/syn/idsabyss
 
 # Environment variables
 Environment=PYTHONUNBUFFERED=1
